@@ -1,32 +1,3 @@
-<!DOCTYPE html>
-<html lang="bn">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>💁🇷 🇴 🇬 FB TEAM🏆 2FA</title>
-  <style>
-    * { box-sizing: border-box; }
-    body {
-      margin: 0;
-      font-family: 'Segoe UI', sans-serif;
-      background: linear-gradient(135deg, #000428, #004e92);
-      color: #eee;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-      overflow: hidden;
-    }
-
-    .container {
-      width: 340px;
-      background: rgba(0, 0, 0, 0.9);
-      padding: 40px 30px;
-      border-radius: 16px;
-      text-align: center;
-      position: relative;
-      z-index: 0;
-      overflow: hidden;
     }
     .container::before {
       content: "";
