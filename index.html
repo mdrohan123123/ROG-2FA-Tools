@@ -1,0 +1,1517 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="🇷 🇴 🇬 2FA Generator - Professional Authentication Tool">
+    <meta name="keywords" content="2FA, OTP, Authenticator, Security, 🇷 🇴 🇬">
+    <meta name="author" content="🇷 🇴 🇬">
+    <title>🔐 🇷 🇴 🇬 2FA Generator</title>
+    
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&family=Montserrat:wght@700;800;900&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <style>
+        /* CSS Reset & Base Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        :root {
+            --primary: #2563EB;
+            --primary-dark: #1E40AF;
+            --primary-light: #3B82F6;
+            --secondary: #10B981;
+            --accent: #8B5CF6;
+            --dark: #0F172A;
+            --darker: #0A0F1C;
+            --light: #F8FAFC;
+            --gray: #64748B;
+            --gray-light: #E2E8F0;
+            --success: #10B981;
+            --warning: #F59E0B;
+            --error: #EF4444;
+            --card-bg: rgba(255, 255, 255, 0.05);
+            --glass-bg: rgba(255, 255, 255, 0.03);
+            --glass-border: rgba(255, 255, 255, 0.1);
+            --shadow-lg: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            --shadow-xl: 0 35px 60px -15px rgba(0, 0, 0, 0.7);
+            --radius-lg: 24px;
+            --radius-md: 16px;
+            --radius-sm: 12px;
+            --transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, var(--darker) 0%, var(--dark) 50%, #1E293B 100%);
+            min-height: 100vh;
+            color: var(--light);
+            overflow-x: hidden;
+            position: relative;
+            width: 100%;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 20% 30%, rgba(37, 99, 235, 0.08) 0%, transparent 50%),
+                radial-gradient(circle at 80% 70%, rgba(139, 92, 246, 0.08) 0%, transparent 50%);
+            z-index: -1;
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(180deg, var(--primary), var(--accent));
+            border-radius: 10px;
+        }
+
+        /* Main Container */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 15px;
+            position: relative;
+            z-index: 1;
+            width: 100%;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Header */
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            position: relative;
+            padding: 30px 15px;
+            background: linear-gradient(135deg, 
+                rgba(37, 99, 235, 0.1) 0%, 
+                rgba(30, 64, 175, 0.2) 50%, 
+                rgba(15, 23, 42, 0.3) 100%);
+            backdrop-filter: blur(20px);
+            border-radius: var(--radius-lg);
+            border: 1px solid var(--glass-border);
+            box-shadow: var(--shadow-xl);
+            overflow: hidden;
+            width: 100%;
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, 
+                transparent, 
+                var(--primary), 
+                var(--accent), 
+                var(--secondary), 
+                transparent);
+            animation: headerShine 3s linear infinite;
+        }
+
+        @keyframes headerShine {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+
+        .logo-container {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 70px;
+            height: 70px;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            border-radius: 50%;
+            margin-bottom: 15px;
+            position: relative;
+            box-shadow: 0 10px 40px rgba(37, 99, 235, 0.4);
+            transition: var(--transition);
+        }
+
+        .logo-container:hover {
+            transform: scale(1.05) rotate(5deg);
+            box-shadow: 0 15px 50px rgba(37, 99, 235, 0.6);
+        }
+
+        .logo-container i {
+            font-size: 32px;
+            color: white;
+            filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
+        }
+
+        .brand-name {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 2.5rem;
+            font-weight: 900;
+            background: linear-gradient(135deg, #FFFFFF, var(--primary-light), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 10px;
+            letter-spacing: -1px;
+            line-height: 1;
+            padding: 0 10px;
+        }
+
+        .brand-subtitle {
+            font-family: 'Poppins', sans-serif;
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--gray-light);
+            margin-bottom: 15px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            position: relative;
+            display: inline-block;
+        }
+
+        .brand-subtitle::after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60px;
+            height: 3px;
+            background: linear-gradient(90deg, transparent, var(--primary), transparent);
+        }
+
+        .version-badge {
+            display: inline-block;
+            background: linear-gradient(135deg, var(--secondary), #059669);
+            color: white;
+            padding: 6px 18px;
+            border-radius: 50px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            box-shadow: 0 5px 15px rgba(16, 185, 129, 0.3);
+        }
+
+        /* Main Grid Layout */
+        .main-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 25px;
+            margin-bottom: 30px;
+            flex: 1;
+            width: 100%;
+        }
+
+        /* Left Panel - Main Content */
+        .main-panel {
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            border-radius: var(--radius-lg);
+            border: 1px solid var(--glass-border);
+            padding: 25px;
+            box-shadow: var(--shadow-lg);
+            width: 100%;
+        }
+
+        /* Input Section */
+        .input-section {
+            margin-bottom: 25px;
+        }
+
+        .section-label {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .section-label i {
+            font-size: 1.2rem;
+            color: var(--primary);
+            background: rgba(37, 99, 235, 0.1);
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 10px;
+            flex-shrink: 0;
+        }
+
+        .section-label span {
+            font-family: 'Poppins', sans-serif;
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--light);
+            word-break: break-word;
+        }
+
+        .input-container {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-bottom: 15px;
+        }
+
+        #secretKey {
+            width: 100%;
+            padding: 16px 20px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            border-radius: var(--radius-md);
+            font-family: 'Inter', monospace;
+            font-size: 1rem;
+            font-weight: 500;
+            color: var(--light);
+            transition: var(--transition);
+            min-height: 56px;
+        }
+
+        #secretKey:focus {
+            outline: none;
+            border-color: var(--primary);
+            background: rgba(37, 99, 235, 0.1);
+            box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.2);
+        }
+
+        #secretKey::placeholder {
+            color: rgba(255, 255, 255, 0.4);
+        }
+
+        /* Action Buttons */
+        .action-buttons {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 12px;
+            margin-bottom: 25px;
+            width: 100%;
+        }
+
+        .action-btn {
+            padding: 18px 15px;
+            border: none;
+            border-radius: var(--radius-md);
+            font-family: 'Poppins', sans-serif;
+            font-weight: 700;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            position: relative;
+            overflow: hidden;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            min-height: 56px;
+        }
+
+        .action-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: 0.6s;
+        }
+
+        .action-btn:hover::before {
+            left: 100%;
+        }
+
+        .action-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .paste-btn {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+        }
+
+        .generate-btn {
+            background: linear-gradient(135deg, var(--secondary), #059669);
+            color: white;
+        }
+
+        .copy-btn {
+            background: linear-gradient(135deg, var(--accent), #7C3AED);
+            color: white;
+        }
+
+        .btn-icon {
+            font-size: 1.2rem;
+        }
+
+        /* Code Display */
+        .code-display-container {
+            background: linear-gradient(135deg, 
+                rgba(37, 99, 235, 0.1) 0%, 
+                rgba(15, 23, 42, 0.2) 100%);
+            border-radius: var(--radius-lg);
+            padding: 25px;
+            margin-bottom: 25px;
+            border: 1px solid var(--glass-border);
+            position: relative;
+            overflow: hidden;
+            width: 100%;
+        }
+
+        .code-display-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, 
+                var(--primary), 
+                var(--accent), 
+                var(--secondary));
+        }
+
+        .code-header {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 20px;
+            gap: 15px;
+        }
+
+        .code-title {
+            font-family: 'Poppins', sans-serif;
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--light);
+            text-align: center;
+        }
+
+        .code-timer {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(255, 255, 255, 0.05);
+            padding: 8px 16px;
+            border-radius: 50px;
+        }
+
+        #timeLeft {
+            font-family: 'Poppins', monospace;
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--primary-light);
+        }
+
+        .code-display {
+            text-align: center;
+            padding: 25px 15px;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: var(--radius-md);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            position: relative;
+            overflow: hidden;
+            margin-bottom: 20px;
+        }
+
+        .code-display::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.05), transparent);
+            animation: codeShine 3s infinite;
+        }
+
+        @keyframes codeShine {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+
+        #generatedCode {
+            font-family: 'Poppins', monospace;
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: var(--light);
+            letter-spacing: 8px;
+            text-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+            position: relative;
+            z-index: 1;
+            word-break: break-all;
+        }
+
+        /* Progress Bar */
+        .progress-container {
+            margin-top: 20px;
+            width: 100%;
+        }
+
+        .progress-bar {
+            height: 6px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 4px;
+            overflow: hidden;
+            position: relative;
+            width: 100%;
+        }
+
+        #progressFill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            width: 100%;
+            transition: width 1s linear;
+            position: relative;
+        }
+
+        #progressFill::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+            animation: progressShine 2s infinite linear;
+        }
+
+        @keyframes progressShine {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+
+        /* Right Panel - Features */
+        .features-panel {
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            border-radius: var(--radius-lg);
+            border: 1px solid var(--glass-border);
+            padding: 25px;
+            box-shadow: var(--shadow-lg);
+            width: 100%;
+        }
+
+        .features-title {
+            font-family: 'Poppins', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: var(--light);
+            margin-bottom: 20px;
+            text-align: center;
+            position: relative;
+            padding-bottom: 12px;
+        }
+
+        .features-title::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60px;
+            height: 3px;
+            background: linear-gradient(90deg, var(--primary), var(--accent));
+            border-radius: 2px;
+        }
+
+        .features-grid {
+            display: grid;
+            gap: 15px;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        }
+
+        .feature-card {
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: var(--radius-md);
+            padding: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            transition: var(--transition);
+        }
+
+        .feature-card:hover {
+            background: rgba(255, 255, 255, 0.05);
+            border-color: rgba(255, 255, 255, 0.1);
+            transform: translateY(-5px);
+        }
+
+        .feature-icon {
+            font-size: 1.8rem;
+            color: var(--primary);
+            margin-bottom: 12px;
+            width: 50px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(37, 99, 235, 0.1);
+            border-radius: 10px;
+        }
+
+        .feature-title {
+            font-family: 'Poppins', sans-serif;
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--light);
+            margin-bottom: 8px;
+        }
+
+        .feature-desc {
+            color: var(--gray-light);
+            font-size: 0.9rem;
+            line-height: 1.5;
+        }
+
+        /* Security Banner */
+        .security-banner {
+            background: linear-gradient(135deg, 
+                rgba(239, 68, 68, 0.1) 0%, 
+                rgba(239, 68, 68, 0.2) 100%);
+            border-radius: var(--radius-lg);
+            padding: 20px;
+            margin-top: 25px;
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .security-banner::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, 
+                transparent, 
+                var(--error), 
+                transparent);
+        }
+
+        .security-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 15px;
+            text-align: center;
+        }
+
+        .security-icon {
+            font-size: 2.5rem;
+            color: var(--error);
+            flex-shrink: 0;
+        }
+
+        .security-text h3 {
+            font-family: 'Poppins', sans-serif;
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: white;
+            margin-bottom: 8px;
+        }
+
+        .security-text p {
+            color: rgba(255, 255, 255, 0.8);
+            line-height: 1.5;
+            font-size: 0.9rem;
+        }
+
+        /* Footer */
+        .footer {
+            background: linear-gradient(135deg, 
+                rgba(15, 23, 42, 0.8) 0%, 
+                rgba(30, 41, 59, 0.8) 100%);
+            backdrop-filter: blur(20px);
+            border-radius: var(--radius-lg);
+            padding: 30px 20px;
+            margin-top: 30px;
+            border: 1px solid var(--glass-border);
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            width: 100%;
+        }
+
+        .footer::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, 
+                var(--primary), 
+                var(--accent), 
+                var(--secondary));
+        }
+
+        .footer-logo {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 2.5rem;
+            font-weight: 900;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 15px;
+        }
+
+        .footer-tagline {
+            font-family: 'Poppins', sans-serif;
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--gray-light);
+            margin-bottom: 20px;
+            letter-spacing: 1px;
+        }
+
+        .copyright {
+            color: var(--gray);
+            font-size: 0.85rem;
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            line-height: 1.5;
+        }
+
+        .copyright span {
+            color: var(--primary);
+            font-weight: 700;
+        }
+
+        /* Toast Notification */
+        .toast {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%) translateY(100px);
+            background: linear-gradient(135deg, var(--dark), #1E293B);
+            color: white;
+            padding: 15px 25px;
+            border-radius: var(--radius-md);
+            font-family: 'Inter', sans-serif;
+            font-weight: 600;
+            font-size: 0.9rem;
+            z-index: 10000;
+            opacity: 0;
+            transition: all 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            box-shadow: var(--shadow-xl);
+            border: 1px solid var(--glass-border);
+            backdrop-filter: blur(20px);
+            text-align: center;
+            width: 90%;
+            max-width: 400px;
+            pointer-events: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+        }
+
+        .toast.show {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+        }
+
+        .toast-icon {
+            font-size: 1.3rem;
+        }
+
+        /* Responsive Design */
+        @media (min-width: 768px) {
+            .container {
+                padding: 20px;
+            }
+            
+            .header {
+                padding: 40px 30px;
+                margin-bottom: 40px;
+            }
+            
+            .logo-container {
+                width: 90px;
+                height: 90px;
+            }
+            
+            .logo-container i {
+                font-size: 42px;
+            }
+            
+            .brand-name {
+                font-size: 3.5rem;
+            }
+            
+            .brand-subtitle {
+                font-size: 1.2rem;
+            }
+            
+            .version-badge {
+                font-size: 0.9rem;
+                padding: 8px 24px;
+            }
+            
+            .main-grid {
+                grid-template-columns: 1fr 1fr;
+                gap: 30px;
+            }
+            
+            .main-panel,
+            .features-panel {
+                padding: 30px;
+            }
+            
+            .input-container {
+                flex-direction: row;
+                align-items: center;
+            }
+            
+            #secretKey {
+                flex: 1;
+            }
+            
+            .action-buttons {
+                grid-template-columns: repeat(3, 1fr);
+            }
+            
+            .code-header {
+                flex-direction: row;
+                align-items: center;
+                text-align: left;
+            }
+            
+            .code-title {
+                text-align: left;
+            }
+            
+            #generatedCode {
+                font-size: 3.5rem;
+                letter-spacing: 12px;
+            }
+            
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .security-content {
+                flex-direction: row;
+                text-align: left;
+            }
+            
+            .footer {
+                padding: 40px 30px;
+            }
+            
+            .footer-logo {
+                font-size: 3rem;
+            }
+            
+            .footer-tagline {
+                font-size: 1.1rem;
+            }
+        }
+
+        @media (min-width: 1024px) {
+            .container {
+                padding: 30px;
+            }
+            
+            .header {
+                padding: 50px 40px;
+                margin-bottom: 50px;
+            }
+            
+            .logo-container {
+                width: 100px;
+                height: 100px;
+            }
+            
+            .logo-container i {
+                font-size: 48px;
+            }
+            
+            .brand-name {
+                font-size: 4rem;
+            }
+            
+            .brand-subtitle {
+                font-size: 1.4rem;
+                letter-spacing: 3px;
+            }
+            
+            .main-grid {
+                gap: 40px;
+                margin-bottom: 50px;
+            }
+            
+            .main-panel,
+            .features-panel {
+                padding: 40px;
+            }
+            
+            #generatedCode {
+                font-size: 4.5rem;
+                letter-spacing: 15px;
+            }
+            
+            .footer {
+                padding: 50px 40px;
+                margin-top: 50px;
+            }
+            
+            .footer-logo {
+                font-size: 3.5rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .brand-name {
+                font-size: 2rem;
+            }
+            
+            .brand-subtitle {
+                font-size: 0.9rem;
+                letter-spacing: 1px;
+            }
+            
+            .version-badge {
+                font-size: 0.7rem;
+                padding: 5px 15px;
+            }
+            
+            .main-panel,
+            .features-panel {
+                padding: 20px 15px;
+            }
+            
+            .section-label span {
+                font-size: 1.1rem;
+            }
+            
+            #generatedCode {
+                font-size: 2rem;
+                letter-spacing: 5px;
+            }
+            
+            .action-buttons {
+                grid-template-columns: 1fr;
+            }
+            
+            .action-btn {
+                padding: 16px;
+                font-size: 0.95rem;
+            }
+            
+            .btn-icon {
+                font-size: 1.1rem;
+            }
+            
+            .feature-card {
+                padding: 15px;
+            }
+            
+            .footer-logo {
+                font-size: 2rem;
+            }
+            
+            .footer-tagline {
+                font-size: 0.9rem;
+            }
+        }
+
+        @media (max-width: 360px) {
+            .brand-name {
+                font-size: 1.8rem;
+            }
+            
+            .brand-subtitle {
+                font-size: 0.8rem;
+            }
+            
+            #generatedCode {
+                font-size: 1.8rem;
+                letter-spacing: 4px;
+            }
+            
+            .container {
+                padding: 10px;
+            }
+            
+            .header {
+                padding: 25px 15px;
+            }
+            
+            .main-panel,
+            .features-panel {
+                padding: 15px 10px;
+            }
+            
+            .section-label {
+                flex-direction: column;
+                text-align: center;
+                gap: 8px;
+            }
+            
+            .section-label i {
+                width: 35px;
+                height: 35px;
+                font-size: 1rem;
+            }
+            
+            .section-label span {
+                font-size: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Main Container -->
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <div class="logo-container">
+                <i class="fas fa-shield-halved"></i>
+            </div>
+            <h1 class="brand-name">🇷 🇴 🇬 2FA</h1>
+            <div class="brand-subtitle">SECURITY GENERATOR</div>
+            <div class="version-badge">Professional Edition</div>
+        </header>
+
+        <!-- Main Grid Layout -->
+        <div class="main-grid">
+            <!-- Left Panel - Main Content -->
+            <div class="main-panel">
+                <!-- Input Section -->
+                <section class="input-section">
+                    <div class="section-label">
+                        <i class="fas fa-key"></i>
+                        <span>ENTER 2FA SECRET KEY</span>
+                    </div>
+                    <div class="input-container">
+                        <input type="text" id="secretKey" 
+                               placeholder="Paste your authentication secret key..."
+                               autocomplete="off"
+                               spellcheck="false">
+                        <button id="pasteBtn" class="action-btn paste-btn">
+                            <i class="fas fa-paste btn-icon"></i>
+                            PASTE KEY
+                        </button>
+                    </div>
+                </section>
+
+                <!-- Action Buttons -->
+                <div class="action-buttons">
+                    <button id="generateBtn" class="action-btn generate-btn">
+                        <i class="fas fa-bolt btn-icon"></i>
+                        GENERATE
+                    </button>
+                    <button id="copyBtn" class="action-btn copy-btn">
+                        <i class="fas fa-copy btn-icon"></i>
+                        COPY CODE
+                    </button>
+                </div>
+
+                <!-- Code Display -->
+                <div class="code-display-container">
+                    <div class="code-header">
+                        <div class="code-title">GENERATED AUTHENTICATION CODE</div>
+                        <div class="code-timer">
+                            <i class="fas fa-clock"></i>
+                            <span id="timeLeft">30s</span>
+                        </div>
+                    </div>
+                    
+                    <div class="code-display">
+                        <div id="generatedCode">------</div>
+                    </div>
+                    
+                    <div class="progress-container">
+                        <div class="progress-bar">
+                            <div id="progressFill"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Panel - Features -->
+            <div class="features-panel">
+                <h2 class="features-title">PROFESSIONAL FEATURES</h2>
+                
+                <div class="features-grid">
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-bolt"></i>
+                        </div>
+                        <h3 class="feature-title">Ultra Fast Generation</h3>
+                        <p class="feature-desc">Generate 2FA codes instantly with encryption algorithms and optimized performance.</p>
+                    </div>
+                    
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-shield-halved"></i>
+                        </div>
+                        <h3 class="feature-title">Enterprise Security</h3>
+                        <p class="feature-desc">End-to-end encryption ensures your authentication keys never leave your device.</p>
+                    </div>
+                    
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-infinity"></i>
+                        </div>
+                        <h3 class="feature-title">Zero Data Collection</h3>
+                        <p class="feature-desc">Complete privacy protection. No tracking, no analytics, no data transmission.</p>
+                    </div>
+                    
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-mobile-alt"></i>
+                        </div>
+                        <h3 class="feature-title">Universal Compatibility</h3>
+                        <p class="feature-desc">Works with all major platforms: Google Authenticator, Authy, Microsoft Authenticator.</p>
+                    </div>
+                </div>
+
+                <!-- Security Banner -->
+                <div class="security-banner">
+                    <div class="security-content">
+                        <div class="security-icon">
+                            <i class="fas fa-user-shield"></i>
+                        </div>
+                        <div class="security-text">
+                            <h3>MAXIMUM SECURITY GUARANTEE</h3>
+                            <p></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <div class="footer-logo">🇷 🇴 🇬 2FA</div>
+            <div class="footer-tagline">PROFESSIONAL AUTHENTICATION GENERATOR</div>
+            
+            <div class="copyright">
+                <p>© 2026 <span>🇷 🇴 🇬</span> | All Rights Reserved | Professional Edition</p>
+                <p>Built by <span>🇷 🇴 🇬</span></p>
+            </div>
+        </footer>
+    </div>
+
+    <!-- Toast Notification -->
+    <div id="toast" class="toast">
+        <i class="fas fa-info-circle toast-icon"></i>
+        <span id="toastMessage">Notification message appears here</span>
+    </div>
+
+    <script>
+        // Professional TOTP Generator
+        class ProfessionalTOTP {
+            static base32Chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ234567";
+            
+            static decodeBase32(base32) {
+                base32 = base32.replace(/\s/g, '').toUpperCase();
+                let buffer = 0, bitsLeft = 0, count = 0;
+                const output = new Uint8Array(Math.floor(base32.length * 5 / 8));
+                
+                for (let i = 0; i < base32.length; i++) {
+                    const val = this.base32Chars.indexOf(base32[i]);
+                    if (val < 0) throw new Error("Invalid Base32 character detected");
+                    
+                    buffer = (buffer << 5) | val;
+                    bitsLeft += 5;
+                    
+                    if (bitsLeft >= 8) {
+                        output[count++] = (buffer >> (bitsLeft - 8)) & 0xff;
+                        bitsLeft -= 8;
+                    }
+                }
+                
+                return output.slice(0, count);
+            }
+            
+            static async generateTOTP(secret, digits = 6, period = 30) {
+                try {
+                    const key = this.decodeBase32(secret);
+                    let counter = Math.floor(Date.now() / 1000 / period);
+                    
+                    // Convert counter to 8-byte array
+                    const data = new Uint8Array(8);
+                    for (let i = 7; i >= 0; i--) {
+                        data[i] = counter & 0xff;
+                        counter = counter >> 8;
+                    }
+                    
+                    // Import cryptographic key
+                    const cryptoKey = await crypto.subtle.importKey(
+                        "raw", key, { name: "HMAC", hash: "SHA-1" }, false, ["sign"]
+                    );
+                    
+                    // Calculate HMAC-SHA1
+                    const signature = await crypto.subtle.sign("HMAC", cryptoKey, data);
+                    const sigBytes = new Uint8Array(signature);
+                    
+                    // Dynamic binary truncation
+                    const offset = sigBytes[sigBytes.length - 1] & 0xf;
+                    const binary = (
+                        ((sigBytes[offset] & 0x7f) << 24) |
+                        ((sigBytes[offset + 1] & 0xff) << 16) |
+                        ((sigBytes[offset + 2] & 0xff) << 8) |
+                        (sigBytes[offset + 3] & 0xff)
+                    );
+                    
+                    const otp = binary % Math.pow(10, digits);
+                    return otp.toString().padStart(digits, '0');
+                    
+                } catch (error) {
+                    console.error("TOTP Generation Error:", error);
+                    return "000000";
+                }
+            }
+        }
+
+        // Professional Application
+        class Professional2FAApp {
+            constructor() {
+                this.secretKeyInput = document.getElementById('secretKey');
+                this.generatedCodeElement = document.getElementById('generatedCode');
+                this.timeLeftElement = document.getElementById('timeLeft');
+                this.progressFill = document.getElementById('progressFill');
+                this.toastElement = document.getElementById('toast');
+                this.toastMessage = document.getElementById('toastMessage');
+                
+                this.currentCode = null;
+                this.timerInterval = null;
+                this.autoRefreshInterval = null;
+                this.lastGenerationTime = 0;
+                
+                this.init();
+            }
+            
+            init() {
+                this.bindEvents();
+                this.startTimer();
+                this.startAutoRefresh();
+                
+                // Initialize with professional touch
+                this.showToast("2FA Generator Ready", "info");
+            }
+            
+            bindEvents() {
+                // Paste button with professional feedback
+                document.getElementById('pasteBtn').addEventListener('click', (e) => {
+                    this.animateButton(e.target);
+                    this.pasteSecretKey();
+                });
+                
+                // Generate button
+                document.getElementById('generateBtn').addEventListener('click', (e) => {
+                    this.animateButton(e.target);
+                    this.generateCode();
+                });
+                
+                // Copy button
+                document.getElementById('copyBtn').addEventListener('click', (e) => {
+                    this.animateButton(e.target);
+                    this.copyGeneratedCode();
+                });
+                
+                // Auto-generate on valid input
+                this.secretKeyInput.addEventListener('input', (e) => {
+                    const secret = e.target.value.trim();
+                    if (secret.length >= 16) {
+                        this.generateCode();
+                    }
+                });
+                
+                // Keyboard shortcuts for professionals
+                document.addEventListener('keydown', (e) => {
+                    if ((e.ctrlKey || e.metaKey) && e.key === 'g') {
+                        e.preventDefault();
+                        this.generateCode();
+                    }
+                    if ((e.ctrlKey || e.metaKey) && e.key === 'c' && this.currentCode) {
+                        e.preventDefault();
+                        this.copyGeneratedCode();
+                    }
+                    if (e.key === 'Enter' && document.activeElement === this.secretKeyInput) {
+                        this.generateCode();
+                    }
+                });
+            }
+            
+            animateButton(button) {
+                // Professional button animation
+                button.style.transform = 'scale(0.95)';
+                setTimeout(() => {
+                    button.style.transform = '';
+                }, 150);
+            }
+            
+            async pasteSecretKey() {
+                try {
+                    const text = await navigator.clipboard.readText();
+                    const trimmed = text.trim();
+                    
+                    if (!trimmed) {
+                        this.showToast("Clipboard is empty", "warning");
+                        return;
+                    }
+                    
+                    this.secretKeyInput.value = trimmed;
+                    // এখানে focus() রিমুভ করা হয়েছে
+                    
+                    this.showToast("Authentication key pasted successfully", "success");
+                    
+                    // Auto-generate if valid
+                    if (trimmed.length >= 16) {
+                        setTimeout(() => this.generateCode(), 300);
+                    }
+                    
+                } catch (error) {
+                    this.showToast("Clipboard access restricted", "error");
+                }
+            }
+            
+            async generateCode() {
+                const secret = this.secretKeyInput.value.trim();
+                
+                if (!secret) {
+                    this.showToast("Please enter an authentication key", "warning");
+                    this.secretKeyInput.focus();
+                    return;
+                }
+                
+                // Throttle generation
+                const now = Date.now();
+                if (now - this.lastGenerationTime < 1000) return;
+                this.lastGenerationTime = now;
+                
+                // Professional loading state
+                this.generatedCodeElement.textContent = '••••••';
+                this.generatedCodeElement.style.opacity = '0.7';
+                
+                const generateBtn = document.getElementById('generateBtn');
+                const originalHTML = generateBtn.innerHTML;
+                generateBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> PROCESSING';
+                generateBtn.disabled = true;
+                
+                try {
+                    const code = await ProfessionalTOTP.generateTOTP(secret);
+                    this.currentCode = code;
+                    
+                    // Professional UI update
+                    requestAnimationFrame(() => {
+                        this.generatedCodeElement.textContent = code;
+                        this.generatedCodeElement.style.opacity = '1';
+                        
+                        // Professional animation
+                        this.animateCodeGeneration();
+                        this.showToast("Authentication code generated successfully", "success");
+                        
+                        // Restore button
+                        setTimeout(() => {
+                            generateBtn.innerHTML = originalHTML;
+                            generateBtn.disabled = false;
+                        }, 1000);
+                        
+                        // Update timer
+                        this.startTimer();
+                    });
+                    
+                } catch (error) {
+                    this.generatedCodeElement.textContent = 'ERROR';
+                    this.showToast("Invalid authentication key format", "error");
+                    generateBtn.innerHTML = originalHTML;
+                    generateBtn.disabled = false;
+                }
+            }
+            
+            async copyGeneratedCode() {
+                if (!this.currentCode || this.currentCode === '------' || this.currentCode === '••••••') {
+                    this.showToast("Generate a code first", "warning");
+                    return;
+                }
+                
+                try {
+                    await navigator.clipboard.writeText(this.currentCode);
+                    
+                    const copyBtn = document.getElementById('copyBtn');
+                    const originalHTML = copyBtn.innerHTML;
+                    copyBtn.innerHTML = '<i class="fas fa-check"></i> COPIED';
+                    
+                    this.showToast(`Authentication code copied to clipboard`, "success");
+                    
+                    // Professional button reset
+                    setTimeout(() => {
+                        copyBtn.innerHTML = originalHTML;
+                    }, 2000);
+                    
+                } catch (error) {
+                    this.showToast("Copy operation failed", "error");
+                }
+            }
+            
+            startTimer() {
+                if (this.timerInterval) {
+                    clearInterval(this.timerInterval);
+                }
+                
+                const period = 30;
+                let lastSeconds = null;
+                
+                this.timerInterval = setInterval(() => {
+                    const now = Math.floor(Date.now() / 1000);
+                    const secondsLeft = period - (now % period);
+                    
+                    if (secondsLeft !== lastSeconds) {
+                        lastSeconds = secondsLeft;
+                        
+                        requestAnimationFrame(() => {
+                            this.timeLeftElement.textContent = `${secondsLeft}s`;
+                            
+                            // Update progress with smooth transition
+                            const progress = (secondsLeft / period) * 100;
+                            this.progressFill.style.width = `${progress}%`;
+                            
+                            // Professional color coding
+                            if (secondsLeft < 10) {
+                                this.timeLeftElement.style.color = '#EF4444';
+                                this.progressFill.style.background = 'linear-gradient(90deg, #EF4444, #F59E0B)';
+                            } else if (secondsLeft < 20) {
+                                this.timeLeftElement.style.color = '#F59E0B';
+                                this.progressFill.style.background = 'linear-gradient(90deg, #F59E0B, #3B82F6)';
+                            } else {
+                                this.timeLeftElement.style.color = '#3B82F6';
+                                this.progressFill.style.background = 'linear-gradient(90deg, #3B82F6, #10B981)';
+                            }
+                        });
+                    }
+                }, 200);
+            }
+            
+            startAutoRefresh() {
+                if (this.autoRefreshInterval) {
+                    clearInterval(this.autoRefreshInterval);
+                }
+                
+                this.autoRefreshInterval = setInterval(async () => {
+                    const secret = this.secretKeyInput.value.trim();
+                    if (secret && this.currentCode && this.currentCode !== '------') {
+                        try {
+                            const newCode = await ProfessionalTOTP.generateTOTP(secret);
+                            if (newCode !== this.currentCode) {
+                                this.currentCode = newCode;
+                                requestAnimationFrame(() => {
+                                    this.generatedCodeElement.textContent = newCode;
+                                    this.animateCodeUpdate();
+                                });
+                            }
+                        } catch (error) {
+                            // Silent refresh fail
+                        }
+                    }
+                }, 2000);
+            }
+            
+            animateCodeGeneration() {
+                const codeDisplay = document.querySelector('.code-display');
+                
+                // Professional scale animation
+                codeDisplay.animate([
+                    { transform: 'scale(1)', opacity: 1 },
+                    { transform: 'scale(1.02)', opacity: 0.9 },
+                    { transform: 'scale(1)', opacity: 1 }
+                ], {
+                    duration: 400,
+                    easing: 'cubic-bezier(0.4, 0, 0.2, 1)'
+                });
+            }
+            
+            animateCodeUpdate() {
+                // Subtle update animation
+                this.generatedCodeElement.style.opacity = '0.8';
+                setTimeout(() => {
+                    this.generatedCodeElement.style.opacity = '1';
+                }, 100);
+            }
+            
+            showToast(message, type = "info") {
+                // Professional toast styling
+                const icons = {
+                    success: 'fas fa-check-circle',
+                    error: 'fas fa-exclamation-circle',
+                    warning: 'fas fa-exclamation-triangle',
+                    info: 'fas fa-info-circle'
+                };
+                
+                const colors = {
+                    success: '#10B981',
+                    error: '#EF4444',
+                    warning: '#F59E0B',
+                    info: '#3B82F6'
+                };
+                
+                this.toastMessage.textContent = message;
+                this.toastElement.querySelector('.toast-icon').className = `${icons[type]} toast-icon`;
+                this.toastElement.style.borderLeft = `4px solid ${colors[type]}`;
+                
+                // Show toast
+                this.toastElement.classList.add('show');
+                
+                // Auto-hide
+                setTimeout(() => {
+                    this.toastElement.classList.remove('show');
+                }, 3000);
+            }
+        }
+
+        // Initialize professional application
+        document.addEventListener('DOMContentLoaded', () => {
+            // Use requestIdleCallback for optimal performance
+            if ('requestIdleCallback' in window) {
+                requestIdleCallback(() => {
+                    window.app = new Professional2FAApp();
+                }, { timeout: 1000 });
+            } else {
+                window.app = new Professional2FAApp();
+            }
+            
+            // Professional page load effects
+            document.body.style.opacity = '0';
+            setTimeout(() => {
+                document.body.style.transition = 'opacity 0.5s ease';
+                document.body.style.opacity = '1';
+            }, 100);
+        });
+
+        // Prevent default behavior
+        document.addEventListener('contextmenu', (e) => e.preventDefault());
+    </script>
+</body>
+</html>
